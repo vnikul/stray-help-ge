@@ -1,0 +1,68 @@
+version: '3.8'
+
+networks:
+  laravel:
+    driver: bridge
+
+services:
+  pet-nginx:
+    build:
+      context: .docker
+      dockerfile: nginx/Dockerfile
+    container_name: pet-nginx
+    ports:
+      - "8080:80"
+      - "9001:9001"
+    volumes:
+      - ./:/var/www/html:delegated
+    depends_on:
+      - php
+    networks:
+      - laravel
+  pet-php:
+    build:
+      context: .docker
+      dockerfile: php/Dockerfile
+      args:
+        user: nikul
+        uid: 1000
+    container_name: pet-php
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "9000:9000"
+    depends_on:
+      - pet-postgres
+    networks:
+      - laravel
+  pet-postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    container_name: pet-postgres
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+    networks:
+      - laravel
+    volumes:
+      - ./database:/var/lib/postgresql
+###> doctrine/doctrine-bundle ###
+  database:
+    image: postgres:${POSTGRES_VERSION:-13}-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      # You should definitely change the password in production
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeMe}
+      POSTGRES_USER: ${POSTGRES_USER:-symfony}
+    volumes:
+      - db-data:/var/lib/postgresql/data:rw
+      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
+      # - ./docker/db/data:/var/lib/postgresql/data:rw
+###< doctrine/doctrine-bundle ###
+
+volumes:
+###> doctrine/doctrine-bundle ###
+  db-data:
+###< doctrine/doctrine-bundle ###
