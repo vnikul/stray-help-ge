@@ -1,0 +1,9 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: Pet-Help API
+            description: This is an app to help pets find a help and home
+            version: 1.0.0
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/
