@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Model\PetListResponse;
-use App\Repository\PetRepository;
 use App\Service\PetService;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Model\PetCategoryListResponse;
 use OpenApi\Annotations as OA;
+use App\Model\ErrorResponse;
 
 class PetController extends AbstractController
 {
@@ -34,8 +34,14 @@ class PetController extends AbstractController
     /**
      * @OA\Response(
      *     response=200,
-     *     description="Returns book categories",
+     *     description="Returns pets by categories",
      *     @Model(type=PetListResponse::class),
+     * )
+     *
+     * @OA\Response(
+     *     response=404,
+     *     description="pet categort not found",
+     *     @Model(type=ErrorResponse::class)
      * )
      */
     #[Route(path: '/pet/category/{id}', methods: ['GET'])]

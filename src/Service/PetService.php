@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Pet;
+use App\Exception\PetCategoryNotFoundException;
 use App\Model\PetListItem;
 use App\Model\PetListResponse;
 use App\Repository\PetCategoryRepository;
@@ -19,9 +20,8 @@ class PetService
 
     public function getPetByCategory(int $categoryID): PetListResponse
     {
-        $category = $this->petCategoryRepository->find($categoryID);
-        if (null === $category) {
-            throw new NotFoundHttpException('category not found');
+        if (!$this->petCategoryRepository->existsByID($categoryID)) {
+            throw new PetCategoryNotFoundException();
         }
 
         return new PetListResponse(
