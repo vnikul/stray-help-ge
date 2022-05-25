@@ -40,6 +40,11 @@ class PetCategoryRepository extends ServiceEntityRepository
         }
     }
 
+    public function existsByID(int $id): bool
+    {
+        return null !== $this->find($id);
+    }
+
 //    /**
 //     * @return Pet[] Returns an array of Pet objects
 //     */

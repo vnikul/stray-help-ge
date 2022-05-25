@@ -47,6 +47,5 @@ class PetCategoryListItem
         $this->title = $title;
         $this->slug = $slug;
     }
-
-
 }
+

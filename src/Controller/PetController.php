@@ -2,30 +2,45 @@
 
 namespace App\Controller;
 
+use App\Model\PetListResponse;
 use App\Repository\PetRepository;
+use App\Service\PetService;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Model\PetCategoryListResponse;
-use OpenApi\Attributes as OA;
+use OpenApi\Annotations as OA;
 
 class PetController extends AbstractController
 {
 
-    public function __construct(private PetRepository $petRepository)
+    public function __construct(private PetService $service)
     {
     }
 
-    #[Route('/pet', methods: ['GET'])]
-    public function index(): JsonResponse
-    {
-        $pets = $this->petRepository->findAll();
+//    #[Route('/pet', methods: ['GET'])]
+//    public function index(): JsonResponse
+//    {
+//        $pets = $this->petRepository->findAll();
+//
+//        return $this->json([
+//            'message' => 'Welcome to your new controller!',
+//            'path' => 'src/Controller/PetController.php',
+//            'pets' => $pets,
+//        ]);
+//    }
 
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/PetController.php',
-            'pets' => $pets,
-        ]);
+    /**
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns book categories",
+     *     @Model(type=PetListResponse::class),
+     * )
+     */
+    #[Route(path: '/pet/category/{id}', methods: ['GET'])]
+    public function byCategory(int $id): JsonResponse
+    {
+        return $this->json($this->service->getPetByCategory($id));
     }
 }

@@ -40,6 +40,14 @@ class PetRepository extends ServiceEntityRepository
         }
     }
 
+    public function getPetByCategory(int $id)
+    {
+        $q = $this->_em->createQuery('SELECT p from App\Entity\Pet p WHERE :categoryID MEMBER OF p.categories');
+        $q->setParameter('categoryID', $id);
+
+        return $q->getResult();
+    }
+
 //    /**
 //     * @return Pet[] Returns an array of Pet objects
 //     */
