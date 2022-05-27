@@ -10,7 +10,6 @@ use App\Model\PetListItem;
 use App\Model\PetListResponse;
 use App\Repository\PetCategoryRepository;
 use App\Repository\PetRepository;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PetService
 {

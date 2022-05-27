@@ -1,7 +1,7 @@
 version: '3.8'
 
 networks:
-  laravel:
+  pet-help:
     driver: bridge
 
 services:
@@ -16,9 +16,9 @@ services:
     volumes:
       - ./:/var/www/html:delegated
     depends_on:
-      - php
+      - pet-php
     networks:
-      - laravel
+      - pet-help
   pet-php:
     build:
       context: .docker
@@ -34,7 +34,7 @@ services:
     depends_on:
       - pet-postgres
     networks:
-      - laravel
+      - pet-help
   pet-postgres:
     image: postgres
     ports:
@@ -45,6 +45,6 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USERNAME}
     networks:
-      - laravel
+      - pet-help
     volumes:
       - ./database:/var/lib/postgresql
