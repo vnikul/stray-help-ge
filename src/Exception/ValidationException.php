@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Exception;
 
 use RuntimeException;
-use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 
 class ValidationException extends RuntimeException

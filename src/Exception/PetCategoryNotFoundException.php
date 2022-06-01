@@ -2,7 +2,6 @@
 
 namespace App\Exception;
 
-use JetBrains\PhpStorm\Internal\LanguageLevelTypeAware;
 use RuntimeException;
 
 class PetCategoryNotFoundException extends RuntimeException

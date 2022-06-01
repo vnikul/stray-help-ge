@@ -9,6 +9,7 @@ class ErrorResponse
 
     /**
      * @param mixed|string $message
+     * @param mixed|string $details
      */
     public function __construct(private string $message, private mixed $details = null)
     {
@@ -19,7 +20,7 @@ class ErrorResponse
         return $this->message;
     }
 
-    public function getDetails(): mixed
+    public function getDetails(): string
     {
         return $this->details;
     }
