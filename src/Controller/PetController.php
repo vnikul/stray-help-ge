@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Model\PetListResponse;
@@ -40,7 +42,7 @@ class PetController extends AbstractController
      *
      * @OA\Response(
      *     response=404,
-     *     description="pet categort not found",
+     *     description="pet category not found",
      *     @Model(type=ErrorResponse::class)
      * )
      */

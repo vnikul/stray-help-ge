@@ -18,7 +18,6 @@ class PetCategoryController extends AbstractController
     public function __construct(private PetCategoryService $service)
     {
     }
-
     /**
      * @OA\Response(
      *     response=200,

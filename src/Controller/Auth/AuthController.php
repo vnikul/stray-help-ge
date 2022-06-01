@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Auth;
 
+use App\Attribute\RequestBody;
+use App\Model\Request\CreateUserRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,11 +22,11 @@ class AuthController extends AbstractController
     }
 
 
-    #[Route('/auth/signup', name: 'app_auth', methods: ['POST'])]
-    public function signUp(): JsonResponse
+    #[Route('/auth/signup', methods: ['POST'])]
+    public function signUp(#[RequestBody] CreateUserRequest $request): JsonResponse
     {
         return $this->json([
-            'message' => 'Welcome to your new controller!',
+            'request' => $request,
             'path' => 'src/Controller/AuthController.php',
         ]);
     }

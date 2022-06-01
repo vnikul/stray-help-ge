@@ -26,12 +26,12 @@ class ApiExceptionListener
     public function __invoke(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
-
         $settings = $this->resolver->resolve(get_class($exception));
 
         if (null === $settings) {
             $settings = ExceptionMapping::fromCode(Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+
 
         if ($settings->isLoggable()) {
             $this->logger->error(
@@ -44,8 +44,12 @@ class ApiExceptionListener
         }
 
         $message = $settings->isHidden() ? Response::$statusTexts[$settings->getCode()] : $exception->getMessage();
+        $details = [
+            'message' => $exception->getMessage(),
+            'trace' => $exception->getTraceAsString(),
+        ];
 
-        $data = $this->serializer->serialize(new ErrorResponse($message), JsonEncoder::FORMAT);
+        $data = $this->serializer->serialize(new ErrorResponse($message, $details), JsonEncoder::FORMAT);
         $res = new JsonResponse($data, $settings->getCode(), [], true);
         $event->setResponse($res);
     }
