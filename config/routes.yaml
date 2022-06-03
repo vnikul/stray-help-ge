@@ -1,10 +1,5 @@
-controllers:
-    resource: ../src/Controller/
-    type: annotation
-
-kernel:
-    resource: ../src/Kernel.php
-    type: annotation
-
 api_login_check:
-    path: /api/login_check
+    path: /api/v1/auth/login
+
+api_refresh_token:
+    path: /api/v1/auth/refresh

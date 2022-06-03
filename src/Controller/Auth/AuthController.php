@@ -16,14 +16,14 @@ class AuthController extends AbstractController
 {
 
     public function __construct(private AuthenticationService $service) {}
-    #[Route('/api/login', name: 'app_auth')]
-    public function index(): JsonResponse
-    {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/AuthController.php',
-        ]);
-    }
+//    #[Route('/api/login', name: 'app_auth')]
+//    public function index(): JsonResponse
+//    {
+//        return $this->json([
+//            'message' => 'Welcome to your new controller!',
+//            'path' => 'src/Controller/AuthController.php',
+//        ]);
+//    }
 
     /**
      * @OA\Response(

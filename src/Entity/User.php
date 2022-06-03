@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+#[ORM\Table(name: '`user`')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -27,7 +28,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private ?string $password;
 
-    #[ORM\Column(type: 'string', unique: true)]
+    #[ORM\Column(type: 'string', unique: true, nullable: true)]
     private ?string $account_id;
 
     /**
@@ -133,5 +134,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
        return $this->id;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->email;
     }
 }
