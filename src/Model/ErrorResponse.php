@@ -20,7 +20,8 @@ class ErrorResponse
         return $this->message;
     }
 
-    public function getDetails(): string
+    /** @return string[] */
+    public function getDetails(): array
     {
         return $this->details;
     }
