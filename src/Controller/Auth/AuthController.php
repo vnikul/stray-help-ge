@@ -9,8 +9,11 @@ use App\Model\Request\CreateUserRequest;
 use App\Service\AuthenticationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class AuthController extends AbstractController
 {
@@ -32,13 +35,14 @@ class AuthController extends AbstractController
      * )
      */
     #[Route('/auth/signup', methods: ['POST'])]
-    public function signUp(#[RequestBody] CreateUserRequest $request): JsonResponse
+    public function signUp(#[RequestBody] CreateUserRequest $request): Response
     {
-        $id = $this->service->createUser($request);
-        return $this->json([
-            'request' => $request,
-            'path' => 'src/Controller/AuthController.php',
-            'id' => $id,
-        ]);
+        return $this->service->createUser($request);
+    }
+
+    #[Route('/auth/whoami', methods: ['GET'])]
+    public function whoami(#[CurrentUser] UserInterface $user): JsonResponse
+    {
+        return $this->json($user);
     }
 }

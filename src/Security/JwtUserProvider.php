@@ -16,11 +16,17 @@ class JwtUserProvider implements PayloadAwareUserProviderInterface
     {
     }
 
+    /**
+     * @throws JsonException
+     */
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
         return $this->getUser('email', $identifier);
     }
 
+    /**
+     * @throws JsonException
+     */
     public function loadUserByIdentifierAndPayload(string $identifier, array $payload): UserInterface
     {
         return $this->getUser('id', $payload['id']);

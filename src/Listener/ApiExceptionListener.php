@@ -11,8 +11,11 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
+use Throwable;
 
 class ApiExceptionListener
 {
@@ -27,6 +30,10 @@ class ApiExceptionListener
     {
         $exception = $event->getThrowable();
         $settings = $this->resolver->resolve(get_class($exception));
+
+        if ($this->isSecurityException($exception)) {
+            return;
+        }
 
         if (null === $settings) {
             $settings = ExceptionMapping::fromCode(Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -52,5 +59,10 @@ class ApiExceptionListener
         $data = $this->serializer->serialize(new ErrorResponse($message, $details), JsonEncoder::FORMAT);
         $res = new JsonResponse($data, $settings->getCode(), [], true);
         $event->setResponse($res);
+    }
+
+    private function isSecurityException(Throwable $exception): bool
+    {
+        return $exception instanceof AuthenticationException || $exception instanceof  AccessDeniedException;
     }
 }
