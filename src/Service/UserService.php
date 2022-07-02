@@ -11,4 +11,9 @@ class UserService
 {
     public function __construct(private UserRepository $repository,private EntityManagerInterface $entityManager){}
 
+
+	public function editUser()
+	{
+
+	}
 }
