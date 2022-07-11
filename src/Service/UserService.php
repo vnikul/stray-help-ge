@@ -32,20 +32,20 @@ class UserService
 		if ($request->getAccountID() !== null) {
 			$user->setAccountId($request->getAccountId());
 		}
-		if ($request->getPassword() !== null)
-		{
-			$hashedPassword = $this->passwordHasher->hashPassword(
-				$user,
-				$request->getPassword()
-			);
-			$user->setPassword($hashedPassword);
-		}
+//		if ($request->getPassword() !== null)
+//		{
+//			$hashedPassword = $this->passwordHasher->hashPassword(
+//				$user,
+//				$request->getPassword()
+//			);
+//			$user->setPassword($hashedPassword);
+//		}
 		if ($request->getPhone()){
 			$user->setPhone($request->getPhone());
 		}
 		$this->entityManager->persist($user);
 		$this->entityManager->flush();
 
-		return new UserResponse($user->getId(), $user->getEmail(), $user->getAccountId(), $user->getPhone());
+		return new UserResponse((string)$user->getId(), $user->getEmail(), $user->getAccountId(), $user->getPhone());
 	}
 }

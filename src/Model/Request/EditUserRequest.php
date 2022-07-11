@@ -11,16 +11,16 @@ class EditUserRequest
 {
 	#[Email]
 	#[Length(max: 255)]
-	private string $email;
+	private string $email = '';
 
 	#[Length(max: 50)]
-	private string $phone;
+	private string $phone = '';
 
-	#[Length(min: 8, max: 255)]
-	private string $password;
+//	#[Length(min: 8, max: 255)]
+//	private string $password = '';
 
 	#[Length(max: 255)]
-	private string $accountID;
+	private string $accountID = '';
 
 
 	/**

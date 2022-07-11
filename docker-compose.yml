@@ -12,7 +12,7 @@ services:
     container_name: pet-nginx
     ports:
       - "8080:80"
-      - "9001:9001"
+      - "9010:9001"
     volumes:
       - ./:/var/www/html:delegated
     depends_on:

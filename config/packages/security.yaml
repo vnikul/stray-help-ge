@@ -28,7 +28,8 @@ security:
     - { path: ^/api/doc,      roles: PUBLIC_ACCESS }
     - { path: ^/auth/signup,  roles: PUBLIC_ACCESS }
     - { path: ^/auth/login,   roles: PUBLIC_ACCESS }
-    - { path: ^/,             roles: IS_AUTHENTICATED_ANONYMOUSLY) }
+    - { path: ^/user/me,      roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/,             roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
   security:

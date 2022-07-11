@@ -34,7 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId(): mixed
     {
         return $this->id;
     }
@@ -43,7 +43,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @param mixed $id
      * @return User
      */
-    public function setId($id)
+    public function setId(mixed $id): User
     {
         $this->id = $id;
         return $this;
@@ -133,7 +133,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUserIdentifier(): string
     {
-       return $this->email;
+       return (string)$this->id;
     }
 
     public function getUsername(): string
