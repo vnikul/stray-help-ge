@@ -9,7 +9,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Model\PetCategoryListResponse;
+use App\Model\Response\PetCategoryListResponse;
 use OpenApi\Annotations as OA;
 
 class PetCategoryController extends AbstractController

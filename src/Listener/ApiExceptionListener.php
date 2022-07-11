@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
-use App\Model\ErrorResponse;
+use App\Model\Response\ErrorResponse;
 use App\Service\ExceptionHandler\ExceptionMapping;
 use App\Service\ExceptionHandler\ExceptionMappingResolver;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -36,7 +37,7 @@ class ApiExceptionListener
         }
 
         if (null === $settings) {
-            $settings = ExceptionMapping::fromCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+			$settings = $this->mapDefaultExceptions($exception);
         }
 
 
@@ -65,4 +66,12 @@ class ApiExceptionListener
     {
         return $exception instanceof AuthenticationException || $exception instanceof  AccessDeniedException;
     }
+
+	private function mapDefaultExceptions(Throwable $exception): ExceptionMapping
+	{
+		if ($exception instanceof NotFoundHttpException) {
+			return ExceptionMapping::fromCode(Response::HTTP_NOT_FOUND);
+		}
+		return ExceptionMapping::fromCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+	}
 }

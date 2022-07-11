@@ -3,8 +3,8 @@
 namespace App\Service;
 
 use App\Entity\PetCategory;
-use App\Model\PetCategoryListItem;
-use App\Model\PetCategoryListResponse;
+use App\Model\Response\PetCategoryListItem;
+use App\Model\Response\PetCategoryListResponse;
 use App\Repository\PetCategoryRepository;
 use Doctrine\Common\Collections\Criteria;
 

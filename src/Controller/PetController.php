@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Model\PetListResponse;
+use App\Model\Response\PetListResponse;
 use App\Service\PetService;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Model\PetCategoryListResponse;
+use App\Model\Response\PetCategoryListResponse;
 use OpenApi\Annotations as OA;
-use App\Model\ErrorResponse;
+use App\Model\Response\ErrorResponse;
 
 class PetController extends AbstractController
 {
