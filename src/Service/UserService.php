@@ -17,7 +17,6 @@ class UserService
 		private readonly UserRepository $repository,
 		private readonly EntityManagerInterface $entityManager,
 		private readonly Security $security,
-		private readonly UserPasswordHasherInterface $passwordHasher
 	) {
 	}
 
@@ -32,14 +31,6 @@ class UserService
 		if ($request->getAccountID() !== null) {
 			$user->setAccountId($request->getAccountId());
 		}
-//		if ($request->getPassword() !== null)
-//		{
-//			$hashedPassword = $this->passwordHasher->hashPassword(
-//				$user,
-//				$request->getPassword()
-//			);
-//			$user->setPassword($hashedPassword);
-//		}
 		if ($request->getPhone()){
 			$user->setPhone($request->getPhone());
 		}

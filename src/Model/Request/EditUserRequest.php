@@ -16,9 +16,6 @@ class EditUserRequest
 	#[Length(max: 50)]
 	private string $phone = '';
 
-//	#[Length(min: 8, max: 255)]
-//	private string $password = '';
-
 	#[Length(max: 255)]
 	private string $accountID = '';
 
