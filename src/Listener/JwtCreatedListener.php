@@ -14,7 +14,8 @@ class JwtCreatedListener
         /** @var User $user */
         $user = $event->getUser();
         $payload = $event->getData();
-        $payload['id'] = $user->getId();
+        $payload['id'] = (string)$user->getId();
+	    $payload['email'] = $user->getEmail();
 
         $event->setData($payload);
     }

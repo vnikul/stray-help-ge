@@ -6,8 +6,8 @@ namespace App\Service;
 
 use App\Entity\Pet;
 use App\Exception\PetCategoryNotFoundException;
-use App\Model\PetListItem;
-use App\Model\PetListResponse;
+use App\Model\Response\PetListItem;
+use App\Model\Response\PetListResponse;
 use App\Repository\PetCategoryRepository;
 use App\Repository\PetRepository;
 

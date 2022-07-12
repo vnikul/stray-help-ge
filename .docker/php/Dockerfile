@@ -1,4 +1,4 @@
-FROM php:8.0-fpm
+FROM php:8.1-fpm
 
 ARG user
 ARG uid
@@ -26,6 +26,10 @@ RUN echo 'deb [trusted=yes] https://repo.symfony.com/apt/ /' | tee /etc/apt/sour
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
+
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+
+COPY ./php/config/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 ENTRYPOINT ["/tmp/scripts/init.sh"]
 

@@ -9,8 +9,6 @@ use App\Exception\UserExistsException;
 use App\Model\Request\CreateUserRequest;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\OptimisticLockException;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationSuccessHandler;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -23,13 +21,9 @@ class AuthenticationService
         private EntityManagerInterface $manager,
         private AuthenticationSuccessHandler $successHandler,
     )
-    {
-
-    }
+    {}
 
     /**
-     * @throws OptimisticLockException
-     * @throws ORMException
      */
     public function createUser(CreateUserRequest $request): Response
     {
