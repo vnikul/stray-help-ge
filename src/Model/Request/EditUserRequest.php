@@ -6,26 +6,34 @@ namespace App\Model\Request;
 
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Optional;
 
 class EditUserRequest
 {
 	#[Email]
+	#[Optional]
 	#[Length(max: 255)]
-	private string $email = '';
+	private string $email;
 
+	#[Optional]
+	#[Length(min: 6,max: 255)]
+	private string $password;
+
+	#[Optional]
 	#[Length(max: 50)]
-	private string $phone = '';
+	private string $phone;
 
+	#[Optional]
 	#[Length(max: 255)]
-	private string $accountID = '';
+	private string $accountID;
 
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
-	public function getEmail(): string
+	public function getEmail(): ?string
 	{
-		return $this->email;
+		return $this->email ?? null;
 	}
 
 	/**
@@ -39,11 +47,11 @@ class EditUserRequest
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
-	public function getPhone(): string
+	public function getPhone(): ?string
 	{
-		return $this->phone;
+		return $this->phone ?? null;
 	}
 
 	/**
@@ -57,11 +65,11 @@ class EditUserRequest
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
-	public function getPassword(): string
+	public function getPassword(): ?string
 	{
-		return $this->password;
+		return $this->password ?? null;
 	}
 
 	/**
@@ -75,16 +83,15 @@ class EditUserRequest
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
-	public function getAccountID(): string
+	public function getAccountID(): ?string
 	{
-		return $this->accountID;
+		return $this->accountID ?? null;
 	}
 
 	/**
-	 * @param  string  $acountID
-	 *
+	 * @param  string  $accountID
 	 * @return EditUserRequest
 	 */
 	public function setAccountID(string $accountID): EditUserRequest
