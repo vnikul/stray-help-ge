@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\RequestBody;
+use App\Model\Request\CreatePetRequest;
 use App\Model\Response\PetListResponse;
 use App\Service\PetService;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Model\Response\PetCategoryListResponse;
+use App\Entity\Pet;
 use OpenApi\Annotations as OA;
 use App\Model\Response\ErrorResponse;
 
@@ -20,18 +22,6 @@ class PetController extends AbstractController
     public function __construct(private PetService $service)
     {
     }
-
-//    #[Route('/pet', methods: ['GET'])]
-//    public function index(): JsonResponse
-//    {
-//        $pets = $this->petRepository->findAll();
-//
-//        return $this->json([
-//            'message' => 'Welcome to your new controller!',
-//            'path' => 'src/Controller/PetController.php',
-//            'pets' => $pets,
-//        ]);
-//    }
 
     /**
      * @OA\Response(
@@ -51,4 +41,17 @@ class PetController extends AbstractController
     {
         return $this->json($this->service->getPetByCategory($id));
     }
+
+	/**
+	 * @OA\Response(
+	 *     response=200,
+	 *     description="Returns pets by categories",
+	 *     @Model(type=Pet::class),
+	 * )
+	 */
+	#[Route(path: '/pet/create', methods: ['POST'])]
+	public function createPet(#[RequestBody] CreatePetRequest $request): JsonResponse
+	{
+		return $this->json($this->service->createPet($request));
+	}
 }

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PetRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,10 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: PetRepository::class)]
 class Pet
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+	#[ORM\Id]
+	#[ORM\Column(type: "uuid", unique: true, columnDefinition: "DEFAULT gen_random_uuid()")]
+	#[ORM\GeneratedValue(strategy: "CUSTOM")]
+	#[ORM\CustomIdGenerator(class: "doctrine.uuid_generator")]
+	private mixed $id;
 
     #[ORM\Column(type: 'string', length: 100, nullable: false)]
     private string $name;
@@ -22,11 +24,16 @@ class Pet
     private string $species;
 
     #[ORM\Column(type: 'date', nullable: true)]
-    private ?\DateTimeInterface $created_at;
-
+    private ?DateTimeInterface $created_at;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description;
+
+	#[ORM\Column(type: 'date', nullable: true)]
+	private ?DateTimeInterface $anthelmintic_given_at;
+
+	#[ORM\Column(type: 'date', nullable: true)]
+	private ?DateTimeInterface $anti_flea_given_at;
 
     /** @var Collection<PetCategory> */
     #[ORM\ManyToMany(targetEntity: PetCategory::class)]
@@ -54,25 +61,25 @@ class Pet
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->created_at;
     }
 
     /**
-     * @param \DateTimeInterface|null $created_at
+     * @param DateTimeInterface|null $created_at
      * @return Pet
      */
-    public function setCreatedAt(?\DateTimeInterface $created_at): Pet
+    public function setCreatedAt(?DateTimeInterface $created_at): Pet
     {
         $this->created_at = $created_at;
         return $this;
     }
 
 
-    public function getId(): ?int
+    public function getId(): mixed
     {
         return $this->id;
     }
@@ -112,4 +119,42 @@ class Pet
 
         return $this;
     }
+
+	/**
+	 * @return DateTimeInterface
+	 */
+	public function getAnthelminticGivenAt(): DateTimeInterface
+	{
+		return $this->anthelmintic_given_at;
+	}
+
+	/**
+	 * @param  DateTimeInterface|null  $anthelmintic_given_at
+	 *
+	 * @return Pet
+	 */
+	public function setAnthelminticGivenAt(?DateTimeInterface $anthelmintic_given_at): Pet
+	{
+		$this->anthelmintic_given_at = $anthelmintic_given_at;
+		return $this;
+	}
+
+	/**
+	 * @return DateTimeInterface
+	 */
+	public function getAntiFleaGivenAt(): DateTimeInterface
+	{
+		return $this->anti_flea_given_at;
+	}
+
+	/**
+	 * @param  DateTimeInterface|null  $anti_flea_given_at
+	 *
+	 * @return Pet
+	 */
+	public function setAntiFleaGivenAt(?DateTimeInterface $anti_flea_given_at): Pet
+	{
+		$this->anti_flea_given_at = $anti_flea_given_at;
+		return $this;
+	}
 }
