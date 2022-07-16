@@ -39,6 +39,9 @@ class Pet
     #[ORM\ManyToMany(targetEntity: PetCategory::class)]
     private Collection $categories;
 
+	#[ORM\ManyToOne(targetEntity: User::class)]
+	private User $owner;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -155,6 +158,24 @@ class Pet
 	public function setAntiFleaGivenAt(?DateTimeInterface $anti_flea_given_at): Pet
 	{
 		$this->anti_flea_given_at = $anti_flea_given_at;
+		return $this;
+	}
+
+	/**
+	 * @return User
+	 */
+	public function getOwner(): User
+	{
+		return $this->owner;
+	}
+
+	/**
+	 * @param  User  $owner
+	 * @return Pet
+	 */
+	public function setOwner(User $owner): Pet
+	{
+		$this->owner = $owner;
 		return $this;
 	}
 }
