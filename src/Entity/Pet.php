@@ -7,10 +7,14 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Annotations as OA;
 
 #[ORM\Entity(repositoryClass: PetRepository::class)]
 class Pet
 {
+	/**
+	 * @OA\Property(type="string")
+	 */
 	#[ORM\Id]
 	#[ORM\Column(type: "uuid", unique: true, columnDefinition: "DEFAULT gen_random_uuid()")]
 	#[ORM\GeneratedValue(strategy: "CUSTOM")]

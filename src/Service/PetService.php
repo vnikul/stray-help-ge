@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Entity\Pet;
 use App\Exception\PetCategoryNotFoundException;
 use App\Model\Request\CreatePetRequest;
+use App\Model\Request\EditPetRequest;
 use App\Model\Response\PetListItem;
 use App\Model\Response\PetListResponse;
 use App\Model\Response\PetResponse;
@@ -15,6 +16,8 @@ use App\Repository\PetCategoryRepository;
 use App\Repository\PetRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Security;
 
 class PetService
@@ -60,6 +63,35 @@ class PetService
 
 		$this->entityManager->persist($pet);
 		$this->entityManager->flush();
+
+		return new PetResponse(
+			(string)$pet->getId(),
+			$pet->getName(),
+			$pet->getSpecies(),
+			new UserResponse((string)$user->getId(), $user->getEmail(), $user->getAccountId(), $user->getPhone())
+		);
+	}
+
+	public function editPet(string $id, EditPetRequest $request): PetResponse
+	{
+		$pet = $this->petRepository->find($id);
+
+		if ($pet === null) {
+			throw new NotFoundHttpException('Pet not found');
+		}
+
+		$user = $this->userRepository->find($this->security->getUser()?->getId());
+
+		if ((string)$user->getId() !== $pet->getOwner()->getId()) {
+			throw new AccessDeniedException();
+		}
+
+		$pet
+			->setName($request->getName())
+			->setSpecies($request->getSpecies())
+			->setAntiFleaGivenAt($request->getAntiFleaGivenAt())
+			->setAnthelminticGivenAt($request->getAnthelmiticGivenAt())
+			->setDescription($request->getDescription());
 
 		return new PetResponse(
 			(string)$pet->getId(),
