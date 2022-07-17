@@ -9,9 +9,13 @@ use App\Exception\PetCategoryNotFoundException;
 use App\Model\Request\CreatePetRequest;
 use App\Model\Response\PetListItem;
 use App\Model\Response\PetListResponse;
+use App\Model\Response\PetResponse;
+use App\Model\Response\UserResponse;
 use App\Repository\PetCategoryRepository;
 use App\Repository\PetRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Security;
 
 class PetService
 {
@@ -19,6 +23,8 @@ class PetService
 		private PetRepository $petRepository,
 		private PetCategoryRepository $petCategoryRepository,
 		private readonly EntityManagerInterface $entityManager,
+		private readonly Security $security,
+		private readonly UserRepository $userRepository,
 	) {
 	}
 
@@ -41,18 +47,25 @@ class PetService
 		return new PetListItem($pet->getId(), $pet->getName(), $pet->getSpecies(), $pet->getDescription());
 	}
 
-	public function createPet(CreatePetRequest $request): Pet
+	public function createPet(CreatePetRequest $request): PetResponse
 	{
+		$user = $this->userRepository->find($this->security->getUser()?->getId());
 		$pet = (new Pet())
 			->setSpecies($request->getSpecies())
 			->setDescription($request->getDescription())
 			->setName($request->getName())
+			->setOwner($user)
 			->setAnthelminticGivenAt($request->getAnthelmiticGivenAt())
 			->setAntiFleaGivenAt($request->getAntiFleaGivenAt());
 
 		$this->entityManager->persist($pet);
 		$this->entityManager->flush();
 
-		return $pet;
+		return new PetResponse(
+			(string)$pet->getId(),
+			$pet->getName(),
+			$pet->getSpecies(),
+			new UserResponse((string)$user->getId(), $user->getEmail(), $user->getAccountId(), $user->getPhone())
+		);
 	}
 }
