@@ -74,7 +74,7 @@ class PetService
 
 	public function editPet(string $id, EditPetRequest $request): PetResponse
 	{
-		$pet = $this->petRepository->find($id);
+		$pet = $this->petRepository->getPetByID($id);
 
 		if ($pet === null) {
 			throw new NotFoundHttpException('Pet not found');
@@ -82,7 +82,7 @@ class PetService
 
 		$user = $this->userRepository->find($this->security->getUser()?->getId());
 
-		if ((string)$user->getId() !== $pet->getOwner()->getId()) {
+		if ((string)$user->getId() !== (string)$pet->getOwner()->getId()) {
 			throw new AccessDeniedException();
 		}
 
@@ -92,6 +92,9 @@ class PetService
 			->setAntiFleaGivenAt($request->getAntiFleaGivenAt())
 			->setAnthelminticGivenAt($request->getAnthelmiticGivenAt())
 			->setDescription($request->getDescription());
+
+		$this->entityManager->persist($pet);
+		$this->entityManager->flush();
 
 		return new PetResponse(
 			(string)$pet->getId(),

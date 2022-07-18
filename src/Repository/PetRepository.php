@@ -6,8 +6,8 @@ namespace App\Repository;
 
 use App\Entity\Pet;
 use App\Entity\PetCategory;
-use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -51,28 +51,14 @@ class PetRepository extends ServiceEntityRepository
 		return $q->getResult();
 	}
 
-//    /**
-//     * @return Pet[] Returns an array of Pet objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+	/**
+	 * @throws NonUniqueResultException
+	 */
+	public function getPetByID(string $id)
+	{
+		$q = $this->_em->createQuery('SELECT p from App\Entity\Pet p WHERE p.id = :petID');
+		$q->setParameter('petID', $id);
 
-//    public function findOneBySomeField($value): ?Pet
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+		return $q->getOneOrNullResult();
+	}
 }

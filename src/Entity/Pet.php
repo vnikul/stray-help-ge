@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\PetRepository;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Annotations as OA;
 
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: PetRepository::class)]
 class Pet
 {
@@ -45,6 +47,12 @@ class Pet
 
 	#[ORM\ManyToOne(targetEntity: User::class)]
 	private User $owner;
+
+	#[ORM\PrePersist]
+	public function setCreatedAtValue(): void
+	{
+		$this->created_at = new DateTimeImmutable();
+	}
 
     public function __construct()
     {
