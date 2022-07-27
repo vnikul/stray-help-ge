@@ -48,6 +48,10 @@ class Pet
 	#[ORM\ManyToOne(targetEntity: User::class)]
 	private User $owner;
 
+	/** @var Collection<PetImage> */
+	#[ORM\OneToMany(mappedBy: 'pet_id', targetEntity: PetImage::class)]
+	private Collection $images;
+
 	#[ORM\PrePersist]
 	public function setCreatedAtValue(): void
 	{
@@ -188,6 +192,30 @@ class Pet
 	public function setOwner(User $owner): Pet
 	{
 		$this->owner = $owner;
+		return $this;
+	}
+
+	/**
+	 * @return Collection
+	 */
+	public function getImages(): Collection
+	{
+		return $this->images;
+	}
+
+	/**
+	 * @param  Collection  $images
+	 * @return Pet
+	 */
+	public function setImages(Collection $images): Pet
+	{
+		$this->images = $images;
+		return $this;
+	}
+
+	public function addImage(PetImage $image)
+	{
+		$this->images[] = $image;
 		return $this;
 	}
 }

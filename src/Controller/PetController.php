@@ -9,9 +9,11 @@ use App\Model\Request\CreatePetRequest;
 use App\Model\Request\EditPetRequest;
 use App\Model\Response\PetListResponse;
 use App\Service\PetService;
+use Doctrine\ORM\NonUniqueResultException;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Pet;
 use OpenApi\Annotations as OA;
@@ -75,10 +77,20 @@ class PetController extends AbstractController
 	 *     description="User is not an owner of a pet",
 	 *     @Model(type=ErrorResponse::class)
 	 * )
+	 * @throws NonUniqueResultException
 	 */
 	#[Route(path: '/pet/edit/{id}', methods: ['POST'])]
 	public function editPet(string $id, #[RequestBody] EditPetRequest $request): JsonResponse
 	{
 		return $this->json($this->service->editPet($id, $request));
+	}
+
+	/**
+	 * @throws NonUniqueResultException
+	 */
+	#[Route(path: '/pet/photos/{id}', methods: ['POST'])]
+	public function addPhotos(string $id, Request $request): JsonResponse
+	{
+		return $this->json($this->service->addPhotos($id, $request));
 	}
 }

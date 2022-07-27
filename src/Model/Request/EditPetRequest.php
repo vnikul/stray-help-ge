@@ -3,6 +3,7 @@
 namespace App\Model\Request;
 
 use DateTimeInterface;
+use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Optional;
@@ -28,6 +29,9 @@ class EditPetRequest
 	#[Type(DateTimeInterface::class)]
 	#[Optional]
 	private ?DateTimeInterface $anti_flea_given_at;
+
+	#[Optional]
+	private array $files;
 
 	/**
 	 * @return string
