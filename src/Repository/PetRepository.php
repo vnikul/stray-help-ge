@@ -7,6 +7,7 @@ namespace App\Repository;
 use App\Entity\Pet;
 use App\Entity\PetCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,59 +20,45 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PetRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, PetCategory::class);
-    }
+	public function __construct(ManagerRegistry $registry)
+	{
+		parent::__construct($registry, PetCategory::class);
+	}
 
-    public function add(Pet $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
+	public function add(Pet $entity, bool $flush = false): void
+	{
+		$this->getEntityManager()->persist($entity);
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
+		if ($flush) {
+			$this->getEntityManager()->flush();
+		}
+	}
 
-    public function remove(Pet $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
+	public function remove(Pet $entity, bool $flush = false): void
+	{
+		$this->getEntityManager()->remove($entity);
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
+		if ($flush) {
+			$this->getEntityManager()->flush();
+		}
+	}
 
-    public function getPetByCategory(int $id)
-    {
-        $q = $this->_em->createQuery('SELECT p from App\Entity\Pet p WHERE :categoryID MEMBER OF p.categories');
-        $q->setParameter('categoryID', $id);
+	public function getPetByCategory(int $id)
+	{
+		$q = $this->_em->createQuery('SELECT p from App\Entity\Pet p WHERE :categoryID MEMBER OF p.categories');
+		$q->setParameter('categoryID', $id);
 
-        return $q->getResult();
-    }
+		return $q->getResult();
+	}
 
-//    /**
-//     * @return Pet[] Returns an array of Pet objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+	/**
+	 * @throws NonUniqueResultException
+	 */
+	public function getPetByID(string $id)
+	{
+		$q = $this->_em->createQuery('SELECT p from App\Entity\Pet p WHERE p.id = :petID');
+		$q->setParameter('petID', $id);
 
-//    public function findOneBySomeField($value): ?Pet
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+		return $q->getOneOrNullResult();
+	}
 }

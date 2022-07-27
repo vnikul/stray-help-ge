@@ -16,6 +16,9 @@ class PetCategory
     #[ORM\Column(type: 'string', length: 100)]
     private ?string $type;
 
+	#[ORM\Column(type: 'string', length: 100)]
+	private ?string $slug;
+
     /**
      * @return string|null
      */
@@ -33,9 +36,6 @@ class PetCategory
         $this->type = $type;
         return $this;
     }
-
-    #[ORM\Column(type: 'string', length: 100)]
-    private ?string $slug;
 
     /**
      * @return string|null

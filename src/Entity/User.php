@@ -8,12 +8,16 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Annotations as OA;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+	/**
+	 * @OA\Property(type="string")
+	 */
     #[ORM\Id]
     #[ORM\Column(type: "uuid", unique: true, columnDefinition: "DEFAULT gen_random_uuid()")]
     #[ORM\GeneratedValue(strategy: "CUSTOM")]
@@ -125,7 +129,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->account_id = $account_id;
         return $this;
     }
-
+	/**
+	 * @OA\Property(type="string[]")
+	 */
     public function getRoles(): array
     {
         return [];

@@ -1,4 +1,7 @@
 {
+    "behat/transliterator": {
+        "version": "v1.5.0"
+    },
     "doctrine/annotations": {
         "version": "1.13",
         "recipe": {
@@ -91,6 +94,9 @@
     },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.12"
+    },
+    "gedmo/doctrine-extensions": {
+        "version": "v3.8.0"
     },
     "gesdinet/jwt-refresh-token-bundle": {
         "version": "v1.1.1"
@@ -360,6 +366,9 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
+    "symfony/mime": {
+        "version": "v6.0.10"
+    },
     "symfony/options-resolver": {
         "version": "v6.0.3"
     },
@@ -383,6 +392,9 @@
     },
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.25.0"
+    },
+    "symfony/polyfill-intl-idn": {
+        "version": "v1.26.0"
     },
     "symfony/polyfill-intl-normalizer": {
         "version": "v1.25.0"

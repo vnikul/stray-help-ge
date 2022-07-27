@@ -3,14 +3,20 @@
 namespace App\Entity;
 
 use App\Repository\PetRepository;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Annotations as OA;
 
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: PetRepository::class)]
 class Pet
 {
+	/**
+	 * @OA\Property(type="string")
+	 */
 	#[ORM\Id]
 	#[ORM\Column(type: "uuid", unique: true, columnDefinition: "DEFAULT gen_random_uuid()")]
 	#[ORM\GeneratedValue(strategy: "CUSTOM")]
@@ -41,6 +47,16 @@ class Pet
 
 	#[ORM\ManyToOne(targetEntity: User::class)]
 	private User $owner;
+
+	/** @var Collection<PetImage> */
+	#[ORM\OneToMany(mappedBy: 'pet_id', targetEntity: PetImage::class)]
+	private Collection $images;
+
+	#[ORM\PrePersist]
+	public function setCreatedAtValue(): void
+	{
+		$this->created_at = new DateTimeImmutable();
+	}
 
     public function __construct()
     {
@@ -176,6 +192,30 @@ class Pet
 	public function setOwner(User $owner): Pet
 	{
 		$this->owner = $owner;
+		return $this;
+	}
+
+	/**
+	 * @return Collection
+	 */
+	public function getImages(): Collection
+	{
+		return $this->images;
+	}
+
+	/**
+	 * @param  Collection  $images
+	 * @return Pet
+	 */
+	public function setImages(Collection $images): Pet
+	{
+		$this->images = $images;
+		return $this;
+	}
+
+	public function addImage(PetImage $image)
+	{
+		$this->images[] = $image;
 		return $this;
 	}
 }
