@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e8a25461c3fa1b6b8e9c7f9958e5733",
+    "content-hash": "252b87acff1d1b5d2aabaace0844b101",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2080,6 +2080,54 @@
                 "source": "https://github.com/namshi/jose/tree/master"
             },
             "time": "2016-12-05T07:27:31+00:00"
+        },
+        {
+            "name": "nazububu/sum",
+            "version": "1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nazububu/sum.git",
+                "reference": "a4a2e466ae272119fd4ca7f798cb87d578e0ea4f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nazububu/sum/zipball/a4a2e466ae272119fd4ca7f798cb87d578e0ea4f",
+                "reference": "a4a2e466ae272119fd4ca7f798cb87d578e0ea4f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7 || ^8"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.0",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Nazububu\\Sum\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nazar Tertyshnyi",
+                    "email": "nazar.tertyshny@gmail.com"
+                }
+            ],
+            "description": "Simple PHP package for add two numbers",
+            "keywords": [
+                "php",
+                "sum"
+            ],
+            "support": {
+                "issues": "https://github.com/nazububu/sum/issues",
+                "source": "https://github.com/nazububu/sum"
+            },
+            "time": "2022-06-07T14:59:30+00:00"
         },
         {
             "name": "nelmio/api-doc-bundle",
