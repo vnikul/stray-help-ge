@@ -22,28 +22,28 @@ use App\Model\Response\ErrorResponse;
 class PetController extends AbstractController
 {
 
-    public function __construct(private PetService $service)
-    {
-    }
+	public function __construct(private PetService $service)
+	{
+	}
 
-    /**
-     * @OA\Response(
-     *     response=200,
-     *     description="Returns pets by categories",
-     *     @Model(type=PetListResponse::class),
-     * )
-     *
-     * @OA\Response(
-     *     response=404,
-     *     description="pet category not found",
-     *     @Model(type=ErrorResponse::class)
-     * )
-     */
-    #[Route(path: '/pet/category/{id}', methods: ['GET'])]
-    public function byCategory(int $id): JsonResponse
-    {
-        return $this->json($this->service->getPetByCategory($id));
-    }
+	/**
+	 * @OA\Response(
+	 *     response=200,
+	 *     description="Returns pets by categories",
+	 *     @Model(type=PetListResponse::class),
+	 * )
+	 *
+	 * @OA\Response(
+	 *     response=404,
+	 *     description="pet category not found",
+	 *     @Model(type=ErrorResponse::class)
+	 * )
+	 */
+	#[Route(path: '/pet/category/{id}', methods: ['GET'])]
+	public function byCategory(int $id): JsonResponse
+	{
+		return $this->json($this->service->getPetByCategory($id));
+	}
 
 	/**
 	 * @OA\Response(
@@ -58,7 +58,6 @@ class PetController extends AbstractController
 		return $this->json($this->service->createPet($request));
 	}
 
-
 	/**
 	 * @OA\Response(
 	 *     response=200,
@@ -68,7 +67,7 @@ class PetController extends AbstractController
 	 *
 	 *  * @OA\Response(
 	 *     response=404,
-	 *     description="pet category not found",
+	 *     description="Pet not found",
 	 *     @Model(type=ErrorResponse::class)
 	 * )
 	 *
@@ -92,5 +91,14 @@ class PetController extends AbstractController
 	public function addPhotos(string $id, Request $request): JsonResponse
 	{
 		return $this->json($this->service->addPhotos($id, $request));
+	}
+
+	/**
+	 * @throws NonUniqueResultException
+	 */
+	#[Route(path: '/pet/get/{id}', methods: ['GET'])]
+	public function getPet(string $id): JsonResponse
+	{
+		return $this->json($this->service->getPetByID($id));
 	}
 }

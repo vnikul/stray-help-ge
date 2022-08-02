@@ -37,8 +37,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $account_id;
 
 	/** @var Collection<Pet> */
-	#[ORM\OneToMany(mappedBy: 'owner_id', targetEntity: Pet::class)]
+	#[ORM\OneToMany(mappedBy: 'owner', targetEntity: Pet::class)]
 	private Collection $pets;
+
+	public function __construct()
+	{
+		$this->pets = new ArrayCollection();
+	}
 
     /**
      * @return mixed
