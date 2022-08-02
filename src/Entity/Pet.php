@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Annotations as OA;
+use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Validator\Constraints\Date;
 
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: PetRepository::class)]
@@ -45,11 +47,13 @@ class Pet
     #[ORM\ManyToMany(targetEntity: PetCategory::class)]
     private Collection $categories;
 
+	#[ORM\JoinColumn(nullable: false)]
 	#[ORM\ManyToOne(targetEntity: User::class)]
 	private User $owner;
 
 	/** @var Collection<PetImage> */
-	#[ORM\OneToMany(mappedBy: 'pet_id', targetEntity: PetImage::class)]
+	#[ORM\JoinColumn(nullable: false)]
+	#[ORM\OneToMany(mappedBy: 'pet', targetEntity: PetImage::class)]
 	private Collection $images;
 
 	#[ORM\PrePersist]
@@ -61,6 +65,7 @@ class Pet
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+		$this->images = new ArrayCollection();
     }
 
     /** @return Collection<PetCategory> */

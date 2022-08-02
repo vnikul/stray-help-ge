@@ -22,6 +22,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Gedmo\Sluggable\Util\Urlizer;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,13 +33,14 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class PetService
 {
 	public function __construct(
-		private PetRepository $petRepository,
-		private PetCategoryRepository $petCategoryRepository,
+		private readonly PetRepository $petRepository,
+		private readonly PetCategoryRepository $petCategoryRepository,
 		private readonly EntityManagerInterface $entityManager,
 		private readonly Security $security,
 		private readonly UserRepository $userRepository,
 		private readonly ValidatorInterface $validator,
-		private readonly string $uploadsDir
+		private readonly PetImageUploaderService $imageUploaderService,
+		private readonly Packages $packages,
 	) {
 	}
 
@@ -116,6 +118,7 @@ class PetService
 	 */
 	public function addPhotos(string $id, Request $request): PetResponse
 	{
+		/** @var Pet $pet */
 		$pet = $this->petRepository->getPetByID($id);
 
 		if ($pet === null) {
@@ -136,21 +139,28 @@ class PetService
 
 		/** @var File $file */
 		foreach ($fileRequest->getPhotos() as $file) {
-			$newFilename = Urlizer::urlize(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '-' . uniqid(
-					'',
-					true
-				) . '.' . $file->guessExtension();
-			$destination = $this->uploadsDir . '/pets';
-			$file->move($destination, $newFilename);
-			$petImage = (new PetImage())->setPath($newFilename)->setPet($pet);
+			$petImage = $this->imageUploaderService->createForPet($file, $pet);
 			$this->entityManager->persist($petImage);
  		}
 		$this->entityManager->flush();
 
-
-		return $this->petResponse($pet, $user);
+		return $this->petResponse($pet, $user)->setLinks($this->getPetPhotos($pet));
 	}
 
+	/**
+	 * @throws NonUniqueResultException
+	 */
+	public function getPetByID(string $id): PetResponse
+	{
+		/** @var Pet $pet */
+		$pet = $this->petRepository->getPetByID($id);
+
+		if ($pet === null) {
+			throw new NotFoundHttpException('Pet not found');
+		}
+
+		return $this->petResponse($pet, $pet->getOwner())->setLinks($this->getPetPhotos($pet));
+	}
 
 	private function checkPetOwner(Pet $pet, User $user): void
 	{
@@ -165,7 +175,18 @@ class PetService
 			(string)$pet->getId(),
 			$pet->getName(),
 			$pet->getSpecies(),
-			new UserResponse((string)$user->getId(), $user->getEmail(), $user->getAccountId(), $user->getPhone())
+			new UserResponse((string)$user->getId(), $user->getEmail(), $user->getAccountId(), $user->getPhone()),
 		);
+	}
+
+	public function getPetPhotos(Pet $pet): array
+	{
+		/** @var []PetImage $images */
+		$images = $pet->getImages();
+		$links = [];
+		foreach ($images as $image){
+			$links[] = $this->packages->getUrl($image->getPath());
+		}
+		return $links;
 	}
 }
