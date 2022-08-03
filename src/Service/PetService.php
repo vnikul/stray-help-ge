@@ -21,7 +21,6 @@ use App\Repository\PetRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
-use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\File\File;
@@ -88,14 +87,8 @@ class PetService
 	/**
 	 * @throws NonUniqueResultException
 	 */
-	public function editPet(string $id, EditPetRequest $request): PetResponse
+	public function editPet(Pet $pet, EditPetRequest $request): PetResponse
 	{
-		$pet = $this->petRepository->getPetByID($id);
-
-		if ($pet === null) {
-			throw new NotFoundHttpException('Pet not found');
-		}
-
 		$user = $this->userRepository->find($this->security->getUser()?->getId());
 
 		$this->checkPetOwner($pet, $user);
@@ -116,15 +109,8 @@ class PetService
 	/**
 	 * @throws NonUniqueResultException
 	 */
-	public function addPhotos(string $id, Request $request): PetResponse
+	public function addPhotos(Pet $pet, Request $request): PetResponse
 	{
-		/** @var Pet $pet */
-		$pet = $this->petRepository->getPetByID($id);
-
-		if ($pet === null) {
-			throw new NotFoundHttpException('Pet not found');
-		}
-
 		$user = $this->userRepository->find($this->security->getUser()?->getId());
 
 		$this->checkPetOwner($pet, $user);
@@ -147,21 +133,6 @@ class PetService
 		return $this->petResponse($pet, $user)->setLinks($this->getPetPhotos($pet));
 	}
 
-	/**
-	 * @throws NonUniqueResultException
-	 */
-	public function getPetByID(string $id): PetResponse
-	{
-		/** @var Pet $pet */
-		$pet = $this->petRepository->getPetByID($id);
-
-		if ($pet === null) {
-			throw new NotFoundHttpException('Pet not found');
-		}
-
-		return $this->petResponse($pet, $pet->getOwner())->setLinks($this->getPetPhotos($pet));
-	}
-
 	private function checkPetOwner(Pet $pet, User $user): void
 	{
 		if ((string)$user->getId() !== (string)$pet->getOwner()->getId()) {
@@ -169,7 +140,7 @@ class PetService
 		}
 	}
 
-	private function petResponse (Pet $pet, User $user): PetResponse
+	public function petResponse (Pet $pet, User $user): PetResponse
 	{
 		return new PetResponse(
 			(string)$pet->getId(),

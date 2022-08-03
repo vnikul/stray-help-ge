@@ -11,6 +11,7 @@ use App\Model\Response\PetListResponse;
 use App\Service\PetService;
 use Doctrine\ORM\NonUniqueResultException;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,26 +80,28 @@ class PetController extends AbstractController
 	 * @throws NonUniqueResultException
 	 */
 	#[Route(path: '/pet/edit/{id}', methods: ['POST'])]
-	public function editPet(string $id, #[RequestBody] EditPetRequest $request): JsonResponse
+	#[Entity('pet', expr: 'repository.getPetByID(id)')]
+	public function editPet(Pet $pet, #[RequestBody] EditPetRequest $request): JsonResponse
 	{
-		return $this->json($this->service->editPet($id, $request));
+		return $this->json($this->service->editPet($pet, $request));
 	}
 
 	/**
 	 * @throws NonUniqueResultException
 	 */
 	#[Route(path: '/pet/photos/{id}', methods: ['POST'])]
-	public function addPhotos(string $id, Request $request): JsonResponse
+	#[Entity('pet', expr: 'repository.getPetByID(id)')]
+	public function addPhotos(Pet $pet, Request $request): JsonResponse
 	{
-		return $this->json($this->service->addPhotos($id, $request));
+		return $this->json($this->service->addPhotos($pet, $request));
 	}
 
 	/**
-	 * @throws NonUniqueResultException
 	 */
 	#[Route(path: '/pet/get/{id}', methods: ['GET'])]
-	public function getPet(string $id): JsonResponse
+	#[Entity('pet', expr: 'repository.getPetByID(id)')]
+	public function getPet(Pet $pet): JsonResponse
 	{
-		return $this->json($this->service->getPetByID($id));
+		return $this->json($this->service->petResponse($pet, $pet->getOwner())->setLinks($this->service->getPetPhotos($pet)));
 	}
 }
