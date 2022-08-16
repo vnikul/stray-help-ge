@@ -10,13 +10,13 @@ class PetResponse
 	private string $name;
 	private string $species;
 	private array $links;
-	private UserResponse $user;
+	private ?UserResponse $user;
 
 	public function __construct(
 		string $id,
 		string $name,
 		string $species,
-		UserResponse $userResponse,
+		UserResponse $userResponse = null,
 		array $links = []
 	) {
 		$this->id = $id;
@@ -53,7 +53,7 @@ class PetResponse
 	/**
 	 * @return UserResponse
 	 */
-	public function getUser(): UserResponse
+	public function getUser(): ?UserResponse
 	{
 		return $this->user;
 	}
@@ -66,6 +66,12 @@ class PetResponse
 	public function setLinks(array $links): PetResponse
 	{
 		$this->links = $links;
+		return $this;
+	}
+
+	public function setUser(UserResponse $user): PetResponse
+	{
+		$this->user = $user;
 		return $this;
 	}
 }

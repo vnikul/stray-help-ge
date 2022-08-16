@@ -6,10 +6,10 @@ namespace App\Model\Response;
 
 class PetListResponse
 {
-    /** @var PetListItem[] */
+    /** @var PetResponse[] */
     private array $items;
 
-    /** @param PetListItem[] */
+    /** @param PetResponse[]  $items */
     public function __construct(array $items)
     {
         $this->items = $items;
