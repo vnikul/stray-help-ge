@@ -25,24 +25,6 @@ class PetRepository extends ServiceEntityRepository
 		parent::__construct($registry, PetCategory::class);
 	}
 
-	public function add(Pet $entity, bool $flush = false): void
-	{
-		$this->getEntityManager()->persist($entity);
-
-		if ($flush) {
-			$this->getEntityManager()->flush();
-		}
-	}
-
-	public function remove(Pet $entity, bool $flush = false): void
-	{
-		$this->getEntityManager()->remove($entity);
-
-		if ($flush) {
-			$this->getEntityManager()->flush();
-		}
-	}
-
 	public function getPetByCategory(int $id)
 	{
 		$q = $this->_em->createQuery('SELECT p from App\Entity\Pet p WHERE :categoryID MEMBER OF p.categories');
@@ -54,11 +36,16 @@ class PetRepository extends ServiceEntityRepository
 	/**
 	 * @throws NonUniqueResultException
 	 */
-	public function getPetByID(string $id)
+	public function getPetByID(string $id): Pet
 	{
 		$q = $this->_em->createQuery('SELECT p from App\Entity\Pet p WHERE p.id = :petID');
 		$q->setParameter('petID', $id);
 
 		return $q->getOneOrNullResult();
+	}
+
+	public function getAllPets(): array
+	{
+		return $this->_em->createQuery('SELECT p from App\Entity\Pet p')->getResult();
 	}
 }

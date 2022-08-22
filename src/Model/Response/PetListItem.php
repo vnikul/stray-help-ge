@@ -6,7 +6,7 @@ namespace App\Model\Response;
 
 class PetListItem
 {
-    private int $id;
+    private string $id;
 
     private string $name;
 
@@ -15,12 +15,12 @@ class PetListItem
     private string $description;
 
     /**
-     * @param int $id
+     * @param string $id
      * @param string $name
      * @param string $species
      * @param string $description
      */
-    public function __construct(int $id, string $name, string $species, string $description = '')
+    public function __construct(string $id, string $name, string $species, string $description = '')
     {
         $this->id = $id;
         $this->name = $name;
@@ -29,9 +29,9 @@ class PetListItem
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }

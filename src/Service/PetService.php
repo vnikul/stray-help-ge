@@ -25,7 +25,6 @@ use Symfony\Component\Asset\Packages;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -43,6 +42,14 @@ class PetService
 	) {
 	}
 
+	public function getAllPets(): PetListResponse
+	{
+		return new PetListResponse(array_map(
+			[$this, 'map'],
+			$this->petRepository->getAllPets()
+		));
+	}
+
 	public function getPetByCategory(int $categoryID): PetListResponse
 	{
 		if (!$this->petCategoryRepository->existsByID($categoryID)) {
@@ -57,9 +64,9 @@ class PetService
 		);
 	}
 
-	private function map(Pet $pet): PetListItem
+	private function map(Pet $pet): PetResponse
 	{
-		return new PetListItem($pet->getId(), $pet->getName(), $pet->getSpecies(), $pet->getDescription());
+		return new PetResponse((string)$pet->getId(), $pet->getName(), $pet->getSpecies(), null, $this->getPetPhotos($pet));
 	}
 
 	public function createPet(CreatePetRequest $request): PetResponse

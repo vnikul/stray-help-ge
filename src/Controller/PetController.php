@@ -96,12 +96,16 @@ class PetController extends AbstractController
 		return $this->json($this->service->addPhotos($pet, $request));
 	}
 
-	/**
-	 */
 	#[Route(path: '/pet/get/{id}', methods: ['GET'])]
 	#[Entity('pet', expr: 'repository.getPetByID(id)')]
 	public function getPet(Pet $pet): JsonResponse
 	{
 		return $this->json($this->service->petResponse($pet, $pet->getOwner())->setLinks($this->service->getPetPhotos($pet)));
+	}
+
+	#[Route(path: '/pets/all', methods: ['GET'])]
+	public function getAllPets(): JsonResponse
+	{
+		return $this->json($this->service->getAllPets());
 	}
 }

@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Annotations as OA;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: PetRepository::class)]
@@ -21,7 +22,7 @@ class Pet
 	#[ORM\Column(type: "uuid", unique: true, columnDefinition: "DEFAULT gen_random_uuid()")]
 	#[ORM\GeneratedValue(strategy: "CUSTOM")]
 	#[ORM\CustomIdGenerator(class: "doctrine.uuid_generator")]
-	private mixed $id;
+	private Uuid $id;
 
     #[ORM\Column(type: 'string', length: 100, nullable: false)]
     private string $name;
